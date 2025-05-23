@@ -1,0 +1,106 @@
+{% extends "base.html" %}
+
+{% block title %}Панель управления Telegram-ботом{% endblock %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col">
+        <h1>Панель управления Telegram-ботом</h1>
+    </div>
+</div>
+
+<div class="row mb-4">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="card-title mb-0">Статус бота</h5>
+            </div>
+            <div class="card-body">
+                <div class="mb-3">
+                    <span class="fw-bold">Текущий статус:</span> 
+                    {% if env_info.bot_status == "Running" %}
+                    <span class="badge bg-success">Работает (PID: {{ env_info.bot_pid }})</span>
+                    {% else %}
+                    <span class="badge bg-danger">Не работает ({{ env_info.bot_status }})</span>
+                    {% endif %}
+                </div>
+                <div class="mb-3">
+                    <span class="fw-bold">Webhook:</span> 
+                    {% if webhook_status == "Active" %}
+                    <span class="badge bg-success">Активен</span>
+                    {% else %}
+                    <span class="badge bg-secondary">{{ webhook_status }}</span>
+                    {% endif %}
+                </div>
+                <div class="mb-3">
+                    <span class="fw-bold">Последняя ошибка webhook:</span> 
+                    {% if last_error == "No errors" %}
+                    <span class="text-success">Нет ошибок</span>
+                    {% else %}
+                    <span class="text-danger">{{ last_error }}</span>
+                    {% endif %}
+                </div>
+                
+                <div class="d-flex gap-2">
+                    {% if env_info.bot_status == "Running" %}
+                    <a href="{{ url_for('stop_bot') }}" class="btn btn-danger">Остановить бота</a>
+                    {% else %}
+                    <a href="{{ url_for('start_bot') }}" class="btn btn-success">Запустить бота</a>
+                    {% endif %}
+                    
+                    {% if webhook_status == "Active" %}
+                    <a href="{{ url_for('remove_webhook') }}" class="btn btn-warning">Удалить webhook</a>
+                    {% else %}
+                    <a href="{{ url_for('setup_webhook') }}" class="btn btn-primary">Установить webhook</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="card-title mb-0">Конфигурация</h5>
+            </div>
+            <div class="card-body">
+                <ul class="list-group">
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        Токен Telegram
+                        <span class="badge bg-{{ 'success' if env_info.bot_token == 'Configured' else 'danger' }}">{{ env_info.bot_token }}</span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        URL для webhook
+                        <span>{{ env_info.webhook_url }}</span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        Режим бота
+                        <span>{{ env_info.bot_mode }}</span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        Порт сервера
+                        <span>{{ env_info.port }}</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="card-title mb-0">Навигация</h5>
+            </div>
+            <div class="card-body">
+                <div class="d-flex gap-3">
+                    <a href="{{ url_for('users') }}" class="btn btn-primary">
+                        <i class="bi bi-people"></i> Управление пользователями
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
