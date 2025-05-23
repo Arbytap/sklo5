@@ -1,0 +1,13 @@
+email-validator
+flask
+flask-login
+flask-sqlalchemy
+flask-wtf
+folium
+gunicorn
+pandas
+psycopg2-binary
+python-dotenv
+python-telegram-bot==13.7
+requests
+pytz
